@@ -14,8 +14,6 @@ from typing import List
 from google.cloud import texttospeech
 
 
-
-
 load_dotenv()
 
 api_key  = os.getenv("GROQ_API_KEY")
@@ -332,9 +330,14 @@ class VoiceSummaryGenerator:
         # LLM model for summarization
         self.model = ChatGroq(model=model_name, api_key=api_key)
         self.parser = StrOutputParser()
+        # Load Google credentials from environment
+        gcreds_str = os.getenv("GOOGLE_CREDS_JSON")
+        with open("gcloud-key.json", "w") as f:
+            f.write(gcreds_str)
 
-        # Google Cloud TTS client
-        self.client = texttospeech.TextToSpeechClient.from_service_account_json(credentials_path)
+        # Initialize client using the file
+        self.client = texttospeech.TextToSpeechClient.from_service_account_json("gcloud-key.json")
+
         self.language_code = "en-US"
         self.voice_name = "en-US-Wavenet-D"
         self.ssml_gender = texttospeech.SsmlVoiceGender.MALE
