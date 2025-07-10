@@ -1,3 +1,5 @@
+import os
+import io
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
 from urllib.parse import urlparse, parse_qs
 from langchain_groq import ChatGroq
@@ -6,18 +8,17 @@ from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser, StrOutputParser
 import requests
 from dotenv import load_dotenv
-import os
-import io
 from typing import List
 from fpdf import FPDF
 from typing import List
 from google.cloud import texttospeech
-from langchain.prompts import PromptTemplate
-from langchain_groq import ChatGroq
-from langchain_core.output_parsers import StrOutputParser
+
+
 
 
 load_dotenv()
+
+api_key  = os.getenv("GROQ_API_KEY")
 
 
 class YouTubeTranscriptFetcher:
@@ -118,7 +119,7 @@ class SmartTextChunker:
 
 class MCQGenerator:
     def __init__(self, model_name="llama-3.1-8b-instant"):
-        self.model = ChatGroq(model=model_name)
+        self.model = ChatGroq(model=model_name, api_key=api_key)
         self.parser = JsonOutputParser()
 
         self.prompt_template = PromptTemplate(
@@ -218,7 +219,7 @@ class SummaryPDF(FPDF):
 class NotesGenerator:
     def __init__(self, chunks: List[List[str]], model_name: str = "llama3-70b-8192"):
         self.chunks = chunks
-        self.llm = ChatGroq(model=model_name)
+        self.llm = ChatGroq(model=model_name, api_key=api_key)
         self.parser = StrOutputParser()
 
     def summarize_chunk(self, text: str) -> str:
@@ -327,9 +328,9 @@ Generate a well-formatted article in plain text format using the following struc
         return buffer.read()
 
 class VoiceSummaryGenerator:
-    def __init__(self, model_name: str = "llama-3.1-8b-instant", credentials_path: str = "hip-fusion-454512-p9-51166d5109ee.json"):
+    def __init__(self, model_name: str = "llama-3.1-8b-instant", credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "gcloud-key.json")):
         # LLM model for summarization
-        self.model = ChatGroq(model=model_name)
+        self.model = ChatGroq(model=model_name, api_key=api_key)
         self.parser = StrOutputParser()
 
         # Google Cloud TTS client
