@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎓 TransLearn Assistant</title>
+  <link rel="stylesheet" href="static/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Landing Page -->
+  <div id="landing-page" class="center-box">
+    <div class="card">
+      <h1>🎓 TransLearn</h1>
+      <p>Paste a YouTube link to begin.</p>
+      <textarea id="youtube-link" placeholder="Paste YouTube video link here..."></textarea>
+      <div class="button-group">
+        <button id="test-btn">📜 Test</button>
+        <button id="notes-btn">📝 Notes</button>
+        <button id="summary-btn">🔊 Summary Audio</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MCQ Config Screen -->
+   <div id="start-screen" class="center-box hidden">
+    <div class="card">
+      <h1>🚀 Welcome to the MCQ Test</h1>
+      <p>Sharpen your knowledge with multiple choice questions!</p>
+
+      <div class="input-section">
+        <label for="num-questions">🧮 Number of Questions:</label><br>
+        <input type="number" id="num-questions" min="5" max="20" value="5">
+      </div>
+       <div class="input-section">
+        <p>🎯 Select Difficulty Level:</p>
+        <div class="diff-options">
+          <button class="diff-btn selected" data-level="easy">Easy</button>
+          <button class="diff-btn" data-level="medium">Medium</button>
+          <button class="diff-btn" data-level="hard">Hard</button>
+        </div>
+         <div class="loader-section hidden"><p>⏳ Preparing Test...</p></div>
+      </div>
+
+      <button id="start-btn">🚀 Start Test</button>
+    </div>
+  </div>
+
+  <!-- Quiz Screen -->
+  <div id="quiz-screen" class="center-box hidden">
+    <div class="card">
+      <div id="timer">⏳ Time left: <span id="time">10</span></div>
+      <form id="quiz-form">
+        <div id="quiz-container"></div>
+        <button type="submit" id="submit-btn">✅ Submit Test</button>
+      </form>
+      <div id="result"></div>
+      <div id="chart-container"><canvas id="scoreChart"></canvas></div>
+      <button class="back-btn">⬅️ Back</button>
+    </div>
+  </div>
+
+  <!-- Notes Screen -->
+  <div id="notes-screen" class="center-box hidden">
+    <div class="card">
+      <h2>📝 Your Notes</h2>
+      <p>Download your notes as a PDF file.</p>
+      <div class="loader-section hidden"><p>⏳ Preparing PDF...</p></div>
+      <a id="download-notes-btn" class="diff-btn hidden" href="#" download>📥 Click to Download Notes</a>
+      <button class="back-btn">⬅️ Back</button>
+    </div>
+  </div>
+
+  <!-- Summary Audio Screen -->
+  <div id="summary-audio-screen" class="center-box hidden">
+    <div class="card">
+      <h2>🔊 Audio Summary</h2>
+      <p>Listen or download the summary of your video.</p>
+      <div class="loader-section hidden"><p>⏳ Generating audio...</p></div>
+      <audio id="audio-player" controls style="display:none;"></audio>
+      <a id="download-audio-btn" class="diff-btn hidden" href="#" download>📥 Click to Download Audio</a>
+      <button class="back-btn">⬅️ Back</button>
+    </div>
+  </div>
+
+  <script src="static/script.js"></script>
+</body>
+</html>

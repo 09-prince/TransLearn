@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+jinja2
+requests
+python-dotenv
+google-cloud-texttospeech
+fpdf2
+youtube-transcript-api
+langchain
+langchain-groq
+langchain-core
+pydantic
