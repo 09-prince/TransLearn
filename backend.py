@@ -237,7 +237,7 @@ Text:
         prompt = PromptTemplate(
             template="""
 Generate a well-formatted article in plain text format using the following structure. Do not use markdown or special characters:
-— no explanations, no markdown and no symbol like "₹".
+— no explanations, no markdown and no symbol use in this.
 1. Title: [Your Title Here]
 2. Section headings ending with a colon (e.g., Introduction:)
 3. Include 1–2 short paragraphs (2–4 sentences each) per section
