@@ -331,9 +331,15 @@ class VoiceSummaryGenerator:
         self.model = ChatGroq(model=model_name, api_key=api_key)
         self.parser = StrOutputParser()
         # Load Google credentials from environment
+
         gcreds_str = os.getenv("GOOGLE_CREDS_JSON")
+
+        if not gcreds_str:
+            raise RuntimeError("❌ GOOGLE_CREDS_JSON is missing. Add it in Railway → Variables tab.")
+
         with open("gcloud-key.json", "w") as f:
             f.write(gcreds_str)
+
 
         # Initialize client using the file
         self.client = texttospeech.TextToSpeechClient.from_service_account_json("gcloud-key.json")
