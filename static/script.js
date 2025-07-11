@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const BACKEND_URL = "http://localhost:8000";
+  const BACKEND_URL = "https://translearn-production.up.railway.app";
   const sections = ["#landing-page", "#start-screen", "#quiz-screen", "#notes-screen", "#summary-audio-screen"];
 
   const linkInput = document.getElementById("youtube-link");
