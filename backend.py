@@ -12,6 +12,8 @@ from typing import List
 from fpdf import FPDF
 from typing import List
 from google.cloud import texttospeech
+import time
+from youtube_transcript_api._errors import VideoUnavailable
 
 
 load_dotenv()
@@ -47,17 +49,25 @@ class YouTubeTranscriptFetcher:
             return "Transcript too short to trim."
         return " ".join(words[n:-n])
 
-    def get_transcript(self, trim_words: int = 100) -> str:
-        try:
-            transcript_list = YouTubeTranscriptApi.get_transcript(self.video_id, languages=[self.language])
-            full_text = " ".join(chunk["text"] for chunk in transcript_list)
-            return self._trim_edges(full_text, trim_words)
-        except TranscriptsDisabled:
-            return "Transcripts are disabled for this video."
-        except NoTranscriptFound:
-            return "No transcript found for this video."
-        except Exception as e:
-            return f"An error occurred: {str(e)}"
+    def get_transcript(self, trim_words: int = 100, retries: int = 5, delay: int = 3) -> str:
+        attempt = 0
+        while attempt < retries:
+            try:
+                transcript_list = YouTubeTranscriptApi.get_transcript(self.video_id, languages=[self.language])
+                full_text = " ".join(chunk["text"] for chunk in transcript_list)
+                return self._trim_edges(full_text, trim_words)
+            except (TranscriptsDisabled, NoTranscriptFound, VideoUnavailable) as e:
+                return f"Transcript error: {str(e)}"
+            except Exception as e:
+                print(f"⚠️ Retry {attempt + 1}/{retries} failed: {e}")
+                time.sleep(delay * (attempt + 1))  # exponential backoff
+                attempt += 1
+
+        return "❌ Failed to fetch transcript after multiple retries."
+
+
+
+
 
 
 def estimate_tokens(text: str) -> int:
